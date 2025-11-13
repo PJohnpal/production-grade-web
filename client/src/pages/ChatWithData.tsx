@@ -36,14 +36,7 @@ export default function ChatWithData() {
     setIsLoading(true);
 
     try {
-      const response = await apiRequest("/api/chat-with-data", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: input }),
-      });
-
+      const response = await apiRequest("POST", "/api/chat-with-data", { query: input });
       const data = (await response.json()) as ChatResponse;
 
       const assistantMessage: Message = {
