@@ -1,0 +1,160 @@
+Build a production-grade full-stack web application consisting of two main modules:
+
+Interactive Analytics Dashboard (data-driven, pixel-accurate to the provided Figma design)
+
+“Chat with Data” Interface — powered by self-hosted Vanna AI and Groq/ LLM, enabling natural-language analytics on the same dataset.
+
+This task evaluates:
+
+End-to-end architecture and deployment
+
+Database design and backend APIs
+
+Frontend implementation accuracy (Next.js + Tailwind + shadcn/ui)
+
+AI integration and reasoning with real data
+
+Documentation, structure, and overall production quality
+
+🧩Dataset
+You are provided with a JSON file:
+📁 Analytics_Test_Data.json (attached here) Google Drive link.
+
+This file contains real-world invoice and vendor data.
+
+Your Tasks:
+Create a PostgreSQL database.
+
+Ingest the data from Analytics_Test_Data.json into suitable relational tables (e.g., invoices, vendors, line_items, payments, etc.).
+
+Expose backend APIs that serve this data to the dashboard and to Vanna AI.
+
+Ensure referential integrity and clean data modeling (types, primary keys, relationships).
+
+💡 Hint: The JSON contains nested structures such as vendor, customer, payment, and line items — you are expected to normalize these logically into database tables.
+
+💻Tech Requirements
+You must use the following stack:
+
+🧱Monorepo
+Use Turborepo or npm workspaces for both frontend and backend.
+
+🖥Frontend (apps/web)
+Framework: Next.js (App Router)
+
+Language: TypeScript
+
+UI Library: shadcn/ui + TailwindCSS
+
+Charts: Chart.js or Recharts
+
+⚙️Backend (apps/api)
+Runtime: Node.js (TypeScript)
+
+Framework: Express.js or Next.js API routes
+
+Database: PostgreSQL
+
+ORM: Prisma / Drizzle (your choice)
+
+APIs: REST endpoints as defined below
+
+🤖AI Layer
+Self-hosted Vanna AI (Python FastAPI/Flask server)
+
+LLM Provider: Groq/ Or any other
+
+Vanna AI must:
+
+Connect to your PostgreSQL database
+
+Use Groq for SQL generation
+
+Respond to natural-language questions about the data
+
+Return generated SQL and query results
+
+☁️Deployment
+Frontend + Backend: Host on Vercel
+
+Vanna AI: Self-host (e.g., Render / Railway / Fly.io / local Docker container) or Digital Ocean etc.
+
+Ensure CORS is enabled for your Vercel domain.
+
+🧠Tasks Overview
+📊Task 1 — Analytics Dashboard
+Recreate the provided Figma dashboard design pixel-perfectly.
+Figma Dashboard
+
+Dashboard must include:
+Overview Cards
+
+Total Spend (YTD)
+
+Total Invoices Processed
+
+Documents Uploaded
+
+Average Invoice Value
+(All values fetched dynamically from backend APIs.)
+
+Charts
+
+Invoice Volume + Value Trend (Line Chart)
+
+Spend by Vendor (Top 10, Horizontal Bar Chart)
+
+Spend by Category (Pie Chart)
+
+Cash Outflow Forecast (Bar Chart)
+
+Invoices Table
+
+Searchable, sortable, scrollable table
+
+Must show vendor, date, invoice number, amount, and status
+
+Backend endpoint: /invoices
+
+💬Task 2 — “Chat With Data” Interface
+Add a second tab in the sidebar called “Chat with Data”.
+
+Requirements:
+Simple chat UI (prompt + streaming response)
+
+User can ask questions like:
+
+“What’s the total spend in the last 90 days?”
+
+“List top 5 vendors by spend.”
+
+“Show overdue invoices as of today.”
+
+Chat flow:
+
+Frontend sends query to backend endpoint /chat-with-data
+
+Backend proxies request to self-hosted Vanna AI
+
+Vanna AI (with Groq) generates SQL → executes on PostgreSQL → returns structured JSON
+
+Frontend displays:
+
+Generated SQL
+
+Results Table (and optional chart)
+
+🧱Backend API Requirements
+Implement the following REST endpoints:
+
+Endpoint	Method	Description
+/stats	GET	Returns totals for overview cards
+/invoice-trends	GET	Returns monthly invoice count and spend
+/vendors/top10	GET	Returns top 10 vendors by spend
+/category-spend	GET	Returns spend grouped by category
+/cash-outflow	GET	Returns expected cash outflow by date range
+/invoices	GET	Returns list of invoices with filters/search
+/chat-with-data	POST	Forwards NL queries to Vanna AI and returns SQL + data
+⚙️Environment Variables (minimum)
+ 
+# Frontend NEXT_PUBLIC_API_BASE=/api NEXT_PUBLIC_APP_URL=https://<your-app>.vercel.app # Backend DATABASE_URL=postgresql://user:pass@host:5432/dbname VANNA_API_BASE_URL=https://<your-vanna-host> VANNA_API_KEY=<if used> # Vanna AI (Python) DATABASE_URL=postgresql+psycopg://user:pass@host:5432/dbname GROQ_API_KEY=... PORT=8000
